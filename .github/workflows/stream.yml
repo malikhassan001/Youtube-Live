@@ -1,0 +1,27 @@
+name: YouTube Live Stream
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    steps:
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install gdown
+        run: pip install gdown
+
+      - name: Download Video from Google Drive
+        run: gdown --id 1sdpVEYo4MDP73uELcMUB-7xwQ-sX82v5 -O video.mp4
+
+      - name: Stream to YouTube
+        run: |
+          ffmpeg -re -stream_loop -1 -i video.mp4 \
+          -c:v libx264 -preset veryfast -maxrate 2500k -bufsize 5000k \
+          -pix_fmt yuv420p -g 50 -c:a aac -b:a 128k -ar 44100 \
+          -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.YOUTUBE_STREAM_KEY }}

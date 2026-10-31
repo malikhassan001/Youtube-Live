@@ -17,7 +17,7 @@ jobs:
         run: pip install gdown
 
       - name: Download Video from Google Drive
-        run: gdown 1u9KiNH3dAwOWFcb_aRVToXHAe1JJJHLN -O video.mp4
+        run: gdown 1xGvGxBFMQFPVfLde-NS1I6jUYu1Sl4hO -O video.mp4
 
       - name: Stream to YouTube
         run: |
